@@ -37,7 +37,7 @@ def Test1():
 
 Test1()
 
-
+'''
 def SomeFunc(*vArgs, **kwArgs):
     for x in vArgs:
         print(x, end=' ')
@@ -52,3 +52,4 @@ SomeFunc(1)
 SomeFunc(1, 2, 3)
 SomeFunc(a = 1, b =2, c = 3)
 SomeFunc(1, 2, 3, p = 4, q = 5, r = 6)
+'''
