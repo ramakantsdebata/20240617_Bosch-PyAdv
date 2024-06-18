@@ -5,10 +5,11 @@ def Log(fn):
         print("Returning from greet()")
     return Wrapper
 
+@Log
 def greet():
     print("Hello")
 
-greet = Log(greet)
+# greet = Log(greet)
 
 
 ###########################################################
