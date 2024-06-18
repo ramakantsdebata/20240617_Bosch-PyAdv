@@ -11,16 +11,24 @@ class Publisher:
     def __len__(self):
         return len(self.collFn)
     
+    def __getitem__(self, idx):
+        return self.collFn[idx]
+    
     def RemoveFunction(self, fn):
         self.collFn.remove(fn)
 
+    def NotifyAll(self, data):
+        for i in range(len(self)):
+            self[i](data)
+
+
 #############################################
 
-def Foo():
-    print("Foo")
+def Foo(data):
+    print("Foo -", data)
 
-def Bar():
-    print("Bar")
+def Bar(data):
+    print("Bar -", data)
 
 pub1 = Publisher()
 pub1.AddFunction(Foo)
@@ -34,4 +42,11 @@ print(pub1)
 pub1.RemoveFunction(Foo)
 print(pub1)
 
-pub1[0]()
+try:
+    pub1[0]("StringData")
+except IndexError as ex:
+    print(f"{ex!r}")
+
+print("Resuming normal functioning")
+pub1.AddFunction(Foo)
+pub1.NotifyAll("Time to wrap up")
