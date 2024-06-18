@@ -1,18 +1,18 @@
 class Publisher:
     def __init__(self) -> None:
-        self.func = []
+        self.collFn = []
 
     def AddFunction(self, fn):
-        self.func.append(fn)
+        self.collFn.append(fn)
 
     def __str__(self):
-        return f"Functions in the collection --> {self.func}"
+        return f"Functions in the collection --> {self.collFn}"
     
     def __len__(self):
-        return len(self.func)
+        return len(self.collFn)
     
     def RemoveFunction(self, fn):
-        self.func.remove(fn)
+        self.collFn.remove(fn)
 
 #############################################
 
@@ -34,4 +34,4 @@ print(pub1)
 pub1.RemoveFunction(Foo)
 print(pub1)
 
-pub1[0]
+pub1[0]()
