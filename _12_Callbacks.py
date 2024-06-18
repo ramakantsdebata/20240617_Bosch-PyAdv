@@ -2,7 +2,7 @@ class Publisher:
     def __init__(self) -> None:
         self.collFn = []
 
-    def AddFunction(self, fn):
+    def Register(self, fn):
         self.collFn.append(fn)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class Publisher:
     def __getitem__(self, idx):
         return self.collFn[idx]
     
-    def RemoveFunction(self, fn):
+    def Unregister(self, fn):
         self.collFn.remove(fn)
 
     def NotifyAll(self, data):
@@ -31,15 +31,15 @@ def Bar(data):
     print("Bar -", data)
 
 pub1 = Publisher()
-pub1.AddFunction(Foo)
-pub1.AddFunction(Bar)
+pub1.Register(Foo)
+pub1.Register(Bar)
 print(len(pub1)) # pub1.__len__()
 print(pub1)
 # print(str(pub1))
 # print(pub1.__str__())
 # print(pub1.__repr__())
 
-pub1.RemoveFunction(Foo)
+pub1.Unregister(Foo)
 print(pub1)
 
 try:
@@ -48,5 +48,7 @@ except IndexError as ex:
     print(f"{ex!r}")
 
 print("Resuming normal functioning")
-pub1.AddFunction(Foo)
+pub1.Register(Foo)
+
+
 pub1.NotifyAll("Time to wrap up")
