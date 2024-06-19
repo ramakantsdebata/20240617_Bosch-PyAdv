@@ -7,6 +7,7 @@
 ### Reg Ex
 * https://docs.python.org/3/library/re.html
 * https://docs.python.org/3/howto/regex.html
+* https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals
 
 
 Feedback - "https://forms.gle/ExathWUWX5nVfvm16"
