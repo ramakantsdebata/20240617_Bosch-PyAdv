@@ -27,4 +27,26 @@ def Test1():
     print()
 
 
-Test1()
+    for x in fg:
+        print(x, end=' ')
+    print()
+
+def Test2():
+
+    for i in range(1, 30, 2):
+        print(i, end=' ')
+    print()
+
+def Test4():
+    it1  = iter(FibGen(10))
+    it2  = iter(FibGen(10))
+
+    try:
+        while True:
+            print(next(it1), end = '-')
+            print(next(it2))
+    except StopIteration:
+        print()
+
+
+Test4()

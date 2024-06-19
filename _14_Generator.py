@@ -38,4 +38,16 @@ def Test3():
         print(i, end=' ')
     print()
 
-Test3()
+def Test4():
+    it1  = FibGen(10)
+    it2  = FibGen(10)
+
+    try:
+        while True:
+            print(next(it1), end = '-')
+            print(next(it2))
+    except StopIteration:
+        print()
+
+
+Test4()
