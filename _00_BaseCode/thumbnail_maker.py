@@ -9,7 +9,7 @@ import PIL
 from PIL import Image
 
 # logger = logging.getLogger(__name__)
-logging.basicConfig(filename='logfile.log', level=logging.INFO, force=bool)
+logging.basicConfig(filename='logfile.log', level=logging.INFO, force=True)
 
 class ThumbnailMakerService(object):
     def __init__(self, home_dir='.'):
