@@ -1,0 +1,117 @@
+--- _29_Prj_With_ThrddDwnld/thumbnail_maker.py	2024-06-20 15:51:59.353815100 +0530
++++ _35_Prj_MP-Queue/thumbnail_maker.py	2024-06-21 12:12:05.175401500 +0530
+@@ -6,6 +6,7 @@
+ from urllib.request import urlretrieve
+ from queue import Queue
+ from threading import Thread
++import multiprocessing
+ 
+ import PIL
+ from PIL import Image
+@@ -18,54 +19,40 @@
+         self.home_dir = home_dir
+         self.input_dir = self.home_dir + os.path.sep + 'incoming'
+         self.output_dir = self.home_dir + os.path.sep + 'outgoing'
+-        self.img_queue = Queue()
+-        self.url_queue = Queue()
++        self.img_queue = multiprocessing.JoinableQueue()
+ 
+ 
+-    def download_image(self):
++    def download_image(self, url_queue):
+         os.makedirs(self.input_dir, exist_ok=True)
+-        
+         logging.info("beginning image downloads")
+ 
+         start = time.perf_counter()
+-        while not self.url_queue.empty():
++        while not url_queue.empty():
+             try:
+-                # Need to guard again while getting, as another thread might 
+-                # have extrated the last url between the last 'empty' check 
+-                # and the 'get' attempt on next line.
+-                
+-                url = self.url_queue.get(block=False)
+-                
+-                # As we know that the url_queue will NOT be re-populated after 
+-                # all urls are extracted, we can unblock and terminate the thread.
+-                # (block = False) configures the get to be non-blocking (don't 
+-                # wait for next item to appear in the queue), and throw an 
+-                # exception 'Queue.Empty'.
++                url = url_queue.get(block=False)
+ 
+                 # download each image and save to the input dir 
+                 img_filename = urlparse(url).path.split('/')[-1]
+                 urlretrieve(url, self.input_dir + os.path.sep + img_filename)
+                 logging.info("downloaded - {}".format(img_filename))
+                 self.img_queue.put(img_filename)
+-                self.url_queue.task_done()
++                url_queue.task_done()
+             except Queue.Empty:
+                 logging.info("URL queue EMPTY !")
+         end = time.perf_counter()
+ 
+     def perform_resizing(self):
+-        # ensure output folder is in place
+         os.makedirs(self.output_dir, exist_ok=True)
+-
+         logging.info("beginning image resizing")
+         target_sizes = [32, 64, 200]
+-        num_images = len(os.listdir(self.input_dir))
++        num_images = len(os.listdir(self.input_dir))    # Used for logging only
+ 
+         start = time.perf_counter()
+-        while True:
++        while True:                        
+             filename = self.img_queue.get()
+-            if filename is None:
+-                self.img_queue.task_done()
+-                break
++            if filename is None:           
++                self.img_queue.task_done() 
++                break                      
+ 
+             orig_img = Image.open(self.input_dir + os.path.sep + filename)
+             for basewidth in target_sizes:
+@@ -92,30 +79,25 @@
+         logging.info("START make_thumbnails")
+         start = time.perf_counter()
+ 
++        url_queue = Queue()
+         for url in img_url_list:
+-            self.url_queue.put(url)
++            url_queue.put(url)
+ 
+-        # Creating a pool of 4 threads and starting those
+         num_dl_threads = 4
+         for idx in range(num_dl_threads):
+-            t1 = Thread(target=self.download_image, name=f"t_Dwnld[{idx}]")
++            t1 = Thread(target=self.download_image, name=f"t_Dwnld[{idx}]", args=(url_queue,))
+             t1.start()
+ 
+-        t2 = Thread(target=self.perform_resizing, name="t_Resize")
+-        t2.start()
++        num_processes = multiprocessing.cpu_count()
++        for _ in range(num_processes):
++            p = multiprocessing.Process(target=self.perform_resizing)
++            p.start()
++
++        url_queue.join() 
+ 
+-        # Block the main thread till all the urls 
+-        # are picked off by the download threads
+-        self.url_queue.join() 
+-        # This is why url_queue.task done was done 
+-        # after the actual download finished, so as
+-        # to avoid a pre-mature poisoning
+-
+-        # Now, send the poison pill to the img_queue 
+-        # for the resize thread to terminate
+-        self.img_queue.put(None)
++        for _ in range(num_processes):
++            self.img_queue.put(None)
+ 
+-        t2.join()
+ 
+         end = time.perf_counter()
+         logging.info("END make_thumbnails in {} seconds".format(end - start))
