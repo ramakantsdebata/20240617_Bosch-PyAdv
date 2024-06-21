@@ -18,6 +18,8 @@
 * Create a virtual environment using the specific version of Python
 * Install the requirements specific to PyQt6 - *'requirements_pyqt.txt'*
 
+* Python 3.11.9 - https://www.python.org/downloads/release/python-3119/
+
 
 
 Feedback - "https://forms.gle/ExathWUWX5nVfvm16"
