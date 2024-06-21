@@ -23,3 +23,4 @@
 * Designer Path: .\.env-pyqt\Lib\site-packages\qt6_applications\Qt\bin\designer.exe
 
 Feedback - "https://forms.gle/ExathWUWX5nVfvm16"
+Post-test: "https://forms.gle/UwN4EAFaXXxwaBGM7"
