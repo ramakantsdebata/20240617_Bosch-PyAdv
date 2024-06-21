@@ -20,6 +20,6 @@
 
 * Python 3.11.9 - https://www.python.org/downloads/release/python-3119/
 
-
+* Designer Path: .\.env-pyqt\Lib\site-packages\qt6_applications\Qt\bin\designer.exe
 
 Feedback - "https://forms.gle/ExathWUWX5nVfvm16"
