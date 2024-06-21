@@ -14,7 +14,7 @@
 * https://github.com/Python/asyncio/wiki/ThirdParty 
 
 ### PyQt6 setup
-* Use Python 3.11.9 for the purpose
+* Use Python 3.11.9 for the purpose; 3.12.3 seems to have incompatibility with the pyqt6-tools package
 * Create a virtual environment using the specific version of Python
 * Install the requirements specific to PyQt6 - *'requirements_pyqt.txt'*
 
