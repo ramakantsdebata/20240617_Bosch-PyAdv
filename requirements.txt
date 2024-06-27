@@ -3,3 +3,4 @@ pytest
 aiohttp
 aiofiles
 requests
+asyncio_timeout
